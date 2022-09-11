@@ -25,6 +25,9 @@ const getCompanies=db.prepare(`
 SELECT * FROM companies 
 `)
 
+const getEmployees=db.prepare(`
+SELECT * FROM employees
+`)
 
 const getSingleApplicant = db.prepare(`
 SELECT * FROM applicants WHERE id=@id;
@@ -33,7 +36,6 @@ SELECT * FROM applicants WHERE id=@id;
 const getInterviewsForApplicant = db.prepare(`
 SELECT * FROM interviews WHERE applicantId=@applicantId;
 `)
-
 
 const getInterviewsForInterviewer = db.prepare(`
 SELECT * FROM interviews WHERE interviewerId=@interviewerId;
@@ -69,9 +71,15 @@ const postNewCompany=db.prepare(`
 INSERT INTO companies(name, city) VALUES(@name, @city);
 `)
 
+const postNewEmployee=db.prepare(`
+INSERT INTO employees(name, email) VALUES(@name, @email);
+`)
+
 const patchInterview=db.prepare(`
 UPDATE interviews SET status=@status WHERE id=@id;
 `)
+
+//get 
 
 app.get('/', (req, res) => {
     res.send("hello")
@@ -91,6 +99,18 @@ app.get('/interviews', (req, res) => {
     const interviews = getInterviews.all()
     res.send(interviews)
 })
+
+app.get('/companies', (req, res)=>{
+    const companies=getCompanies.all();
+    res.send(companies)
+})
+
+app.get('/employees', (req, res)=>{
+const employees=getEmployees.all()
+res.send(employees)
+})
+
+//get one
 
 app.get('/interviews/:id',(req, res)=>{
     const interview=getSingleInterview.get(req.params)
@@ -131,12 +151,7 @@ app.get('/interviewers/:id', (req, res) => {
     }
 })
 
-app.get('/companies', (req, res)=>{
-    const companies=getCompanies.all();
-    res.send(companies)
-})
-
-
+// post 
 
 app.post('/applicants', (req, res) => {
     const errors: string[] = []
@@ -235,17 +250,25 @@ else{
 }
 })
 
+// patch
 
 app.patch("/interviews/:id", (req, res)=>{
     const interview=getSingleInterview.get(req.params)
     if(interview){
         console.log(req.body)
-        patchInterview.run({id: req.params.id, status:req.body.status})
-        res.send("Updated sucessfully!")
+        const updatedInterview=patchInterview.run({id: req.params.id, status:req.body.status})
+        res.send(updatedInterview)
+
+    if(req.body.status="sucessful"){
+        const applicant=getSingleApplicant.get({id:interview.applicantId})
+postNewEmployee.run({name: applicant.name, email:applicant.email})
+    }
+
     }
 else{
   res.send({error: "sth went wrong somewhere! :)"})
 }
+
 })
 
 
