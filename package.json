@@ -1,7 +1,6 @@
 {
   "name": "hoxton-node-data-modeling-simplified",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,5 +11,15 @@
   "dependencies": {
     "@types/better-sqlite3": "^7.6.0",
     "better-sqlite3": "^7.6.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xhulia16/hoxton-node-data-modeling-simplified.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xhulia16/hoxton-node-data-modeling-simplified/issues"
+  },
+  "homepage": "https://github.com/xhulia16/hoxton-node-data-modeling-simplified#readme",
+  "description": ""
 }
