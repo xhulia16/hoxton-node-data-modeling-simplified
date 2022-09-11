@@ -67,62 +67,62 @@ const interviews = [
         applicantId: 1,
         interviewerId: 2,
         date: "05/9/22",
-        score: 58
+        status: "pending"
     },
     {
         applicantId: 1,
         interviewerId: 4,
         date: "06/9/22",
-        score: 80
+        status: "pending"
     },
     {
         applicantId: 2,
         interviewerId: 3,
         date: "06/9/22",
-        score: 25
+        status: "pending"
     },
     {
         applicantId: 2,
         interviewerId: 1,
         date: "05/9/22",
-        score: 70
+        status: "pending"
     },
     {
         applicantId: 3,
         interviewerId: 4,
         date: "04/9/22",
-        score: 100
+        status: "pending"
     },
     {
         applicantId: 3,
         interviewerId: 3,
         date: "03/9/22",
-        score: 98
+        status: "pending"
     },
     {
         applicantId: 4,
         interviewerId: 4,
         date: "02/9/22",
-        score: 28
+        status: "pending"
     },
     {
         applicantId: 4,
         interviewerId: 1,
         date: "01/9/22",
-        score: 66
+        status: "pending"
     },
     {
         applicantId: 5,
         interviewerId: 2,
         date: "04/9/22",
-        score: 84
+        status: "pending"
     },
     {
         applicantId: 5,
         interviewerId: 3,
         date: "01/9/22",
-        score: 50
-    },
+        status: "pending"
+    }
 ]
 
 const companies = [
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS interviewers (
     applicantId INTEGER,
     interviewerId INTEGER,
     date TEXT,
-    score INTEGER,
+    status TEXT,
     PRIMARY KEY (id),
     FOREIGN KEY (applicantId) REFERENCES applicants(id) ON DELETE CASCADE,
     FOREIGN KEY (interviewerId) REFERENCES interviewers(id) ON DELETE CASCADE
@@ -302,7 +302,7 @@ INSERT INTO interviewers( name, age, email, companyId) VALUES( @name, @age, @ema
 `)
 
 const insertInterviews=db.prepare(`
-INSERT INTO interviews(applicantId, interviewerId, date, score) VALUES( @applicantId, @interviewerId, @date, @score);
+INSERT INTO interviews(applicantId, interviewerId, date, status) VALUES( @applicantId, @interviewerId, @date, @status);
 `)
 
 

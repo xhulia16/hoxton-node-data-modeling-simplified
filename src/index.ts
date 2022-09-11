@@ -62,14 +62,16 @@ INSERT INTO interviewers(name, age, email, companyId) VALUES(@name, @age, @email
 `)
 
 const postNewInterview = db.prepare(`
-INSERT INTO interviews(applicantId, interviewerId, date, score) VALUES(@applicantId, @interviewerId, @date, @score)
+INSERT INTO interviews(applicantId, interviewerId, date, status) VALUES(@applicantId, @interviewerId, @date, @status)
 `)
 
 const postNewCompany=db.prepare(`
 INSERT INTO companies(name, city) VALUES(@name, @city);
 `)
 
-
+const patchInterview=db.prepare(`
+UPDATE interviews SET status=@status WHERE id=@id;
+`)
 
 app.get('/', (req, res) => {
     res.send("hello")
@@ -88,6 +90,16 @@ app.get('/interviewers', (req, res) => {
 app.get('/interviews', (req, res) => {
     const interviews = getInterviews.all()
     res.send(interviews)
+})
+
+app.get('/interviews/:id',(req, res)=>{
+    const interview=getSingleInterview.get(req.params)
+    if(interview){
+        res.send(interview)
+    }
+    else{
+        res.status(404).send({error: "Interview not found!"})
+    }
 })
 
 app.get('/applicants/:id', (req, res) => {
@@ -188,8 +200,8 @@ app.post('/interviews', (req, res) => {
     if (typeof req.body.date !== "string") {
         errors.push("Please enter a valid date")
     }
-    if (typeof req.body.score !== "number") {
-        errors.push("Please enter a valid score")
+    if (typeof req.body.status !== "string") {
+        errors.push("Please enter a valid status")
     }
 
     if (errors.length === 0) {
@@ -222,5 +234,20 @@ else{
     res.status(400).send({errors:errors})
 }
 })
+
+
+app.patch("/interviews/:id", (req, res)=>{
+    const interview=getSingleInterview.get(req.params)
+    if(interview){
+        console.log(req.body)
+        patchInterview.run({id: req.params.id, status:req.body.status})
+        res.send("Updated sucessfully!")
+    }
+else{
+  res.send({error: "sth went wrong somewhere! :)"})
+}
+})
+
+
 
 app.listen(port)
